@@ -1,88 +1,106 @@
-s# 🚗💨 Turbo-Legends-BR
-🔥 Viral Short Description (for top of repo)  🚗 Drive insane cars, build powerful engines, and turn your Minecraft world into a high-speed machine with Turbo Legends BR.
+# Turbo Legends BR
 
-⚡ The Ultimate Driving Experience in Minecraft Bedrock
+Turbo Legends BR e um add-on para Minecraft Bedrock focado em carros, mecanica modular e progressao tecnica.
 
-Turbo Legends BR transforms your world into a high-performance automotive playground.
-From legendary Brazilian street cars to insane hypercars, build, customize, and dominate the roads with fully modular vehicles and advanced systems.
+Construa veiculos do zero, evolua motores, gerencie energia e transforme seu mundo em uma oficina de alta performance.
 
-🔥 Not just cars. A complete mechanical evolution inside Minecraft.
+## Visao Geral
 
-🚀 Core Features
-🚗 Vehicles
-🇧🇷 Brazilian icons (Fusca, Uno with ladder, Gol, Kombi)
-🏎️ High-speed sports & hypercars
-🚙 Utility and off-road vehicles
-⚙️ Modular Engineering System
+Este projeto combina simulacao automotiva com sistemas de sobrevivencia e producao.
+O objetivo e oferecer uma experiencia de direcao divertida, com identidade brasileira e profundidade de gameplay.
 
-Build your car from scratch:
+## Principais Recursos
 
-Chassis
-Engine (V3 → V12 progression)
-Wheels
-Battery
+### Veiculos
 
-Each component directly impacts performance.
+- Icones brasileiros como Fusca, Uno com escada, Gol e Kombi
+- Carros esportivos e hipercarros de alta velocidade
+- Veiculos utilitarios e off-road
 
-🌳 Resource & Production
-Rubber extraction from custom trees
-Latex → Rubber (furnace processing)
-Steel crafting (Iron + Coal)
-Copper-based electronics
+### Engenharia Modular
 
-⚡ Electrical System
-Cables for crafting and energy
-Electrolytes for engines
-Battery tiers for power management
+Monte cada carro com componentes independentes:
 
-🔥 Engine Heat System (Unique)
-Engines generate heat while running
-Use your car as a mobile furnace
-Faster engines = more heat
-Balanced to avoid being overpowered
+- Chassi
+- Motor (progressao de V3 ate V12)
+- Rodas
+- Bateria
 
-🏭 Workshop System
-Custom interface for:
-Building cars
-Upgrading components
-Painting vehicles
+Cada peca impacta diretamente o desempenho final.
 
-🎨 Customization
-Advanced paint system
-Performance upgrades
-Multiple build styles
+### Recursos e Producao
 
-😂 Special Mechanics
-Fusca → extremely durable
-Uno with ladder → massive storage
-Gol → plays “GOOOOL!” on startup
-Kombi → multi-passenger
+- Extracao de latex em arvores customizadas
+- Processamento de latex para borracha
+- Producao de aco (ferro + carvao)
+- Eletronica baseada em cobre
 
-🧠 Tech Stack
-Minecraft Bedrock Add-on
-Behavior Pack + Resource Pack
-JavaScript (GameTest API)
-JSON systems
-🛣️ Roadmap
-🔋 Advanced energy system
-⛽ Fuel & oil mechanics
-🚓 Police / traffic systems
-💥 Damage & crash physics
-🧩 Expanded vehicle roster
-📦 Installation
-Download the latest release
-Import into Minecraft Bedrock
-Enable:
-Behavior Pack
-Resource Pack
-Activate experimental features
-🤝 Contributing
+### Sistema Eletrico
 
-Want to help build the best car mod for Bedrock?
+- Cabos para receitas e distribuicao de energia
+- Eletrolitos para motores
+- Niveis de bateria para diferentes demandas
 
-Fork the repo
-Create your feature branch
-Commit changes
-Open a Pull Request
+### Sistema de Calor do Motor
 
-What do you think @Copilot?
+- Motores geram calor durante o uso
+- O calor pode ser aproveitado como forno movel
+- Motores mais fortes geram mais calor
+- Balanceado para nao quebrar a progressao
+
+### Oficina
+
+Interface dedicada para:
+
+- Montar carros
+- Evoluir componentes
+- Pintar veiculos
+
+### Customizacao
+
+- Sistema de pintura avancado
+- Upgrades de performance
+- Estilos diferentes de montagem
+
+### Mecanicas Especiais
+
+- Fusca: alta durabilidade
+- Uno com escada: armazenamento ampliado
+- Gol: efeito sonoro especial ao ligar
+- Kombi: foco em transporte de passageiros
+
+## Tecnologias
+
+- Minecraft Bedrock Add-on
+- Behavior Pack + Resource Pack
+- JavaScript (GameTest API)
+- JSON para definicao de sistemas
+
+## Instalacao
+
+1. Baixe a release mais recente do projeto.
+2. Importe os pacotes no Minecraft Bedrock.
+3. Ative o Behavior Pack no mundo.
+4. Ative o Resource Pack no mundo.
+5. Habilite os recursos experimentais necessarios.
+
+## Roadmap
+
+- Sistema de energia avancado
+- Mecanicas de combustivel e oleo
+- Sistema de transito e policia
+- Dano, colisao e fisica de impacto
+- Expansao da frota de veiculos
+
+## Contribuindo
+
+Contribuicoes sao bem-vindas.
+
+1. Faça um fork do repositorio.
+2. Crie uma branch para sua feature: `feat/minha-feature`.
+3. Commit suas alteracoes com mensagens claras.
+4. Abra um Pull Request descrevendo o que foi alterado.
+
+## Status
+
+Projeto em evolucao. Novos sistemas e veiculos serao adicionados em etapas.
