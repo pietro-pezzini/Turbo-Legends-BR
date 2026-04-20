@@ -5,7 +5,18 @@ const LATEX_ITEM_ID = "turbo_legends_br:latex";
 const CUT_STATE_KEY = "turbo_legends_br:is_cut";
 const REGEN_TICKS = 20 * 60 * 10;
 const regenQueue = new Map();
-const generatedSpawns = new Set();
+const FLAG_OBJECTIVE_ID = "tlb_flags";
+const GROVE_FLAG = "rubber_grove_generated_v1";
+const REPLACEABLE_BLOCKS = new Set([
+  "minecraft:air",
+  "minecraft:cave_air",
+  "minecraft:void_air",
+  "minecraft:snow_layer",
+  "minecraft:tallgrass",
+  "minecraft:short_grass",
+  "minecraft:fern",
+  "minecraft:double_plant"
+]);
 
 function blockKey(block) {
   return `${block.dimension.id}|${block.location.x},${block.location.y},${block.location.z}`;
@@ -35,17 +46,47 @@ function addLatexToPlayer(player) {
   return inventory.container.addItem(new ItemStack(LATEX_ITEM_ID, 1)) === undefined;
 }
 
+function getFlagsObjective() {
+  let objective = world.scoreboard.getObjective(FLAG_OBJECTIVE_ID);
+  if (!objective) {
+    objective = world.scoreboard.addObjective(FLAG_OBJECTIVE_ID, "Turbo Legends Flags");
+  }
+  return objective;
+}
+
+function isGroveGenerated() {
+  try {
+    const score = getFlagsObjective().getScore(GROVE_FLAG);
+    return score === 1;
+  } catch {
+    return false;
+  }
+}
+
+function markGroveGenerated() {
+  getFlagsObjective().setScore(GROVE_FLAG, 1);
+}
+
+function canReplaceBlock(block, targetTypeId) {
+  if (!block) return false;
+  if (block.typeId === targetTypeId) return true;
+  return REPLACEABLE_BLOCKS.has(block.typeId);
+}
+
 function placeBlock(dimension, x, y, z, typeId) {
   const block = dimension.getBlock({ x, y, z });
-  if (!block) return;
+  if (!canReplaceBlock(block, typeId)) return false;
   block.setPermutation(BlockPermutation.resolve(typeId));
+  return true;
 }
 
 function generateRubberTree(dimension, origin) {
   const { x, y, z } = origin;
+  const trunkPositions = [];
+  const leafPositions = [];
 
   for (let dy = 0; dy < 4; dy += 1) {
-    placeBlock(dimension, x, y + dy, z, RUBBER_LOG_ID);
+    trunkPositions.push([x, y + dy, z]);
   }
 
   const leafOffsets = [
@@ -61,25 +102,46 @@ function generateRubberTree(dimension, origin) {
     [0, 5, 0]
   ];
 
-  for (const [dx, dy, dz] of leafOffsets) {
-    placeBlock(dimension, x + dx, y + dy, z + dz, "minecraft:oak_leaves");
+  for (const [lx, ly, lz] of trunkPositions) {
+    const block = dimension.getBlock({ x: lx, y: ly, z: lz });
+    if (!canReplaceBlock(block, RUBBER_LOG_ID)) return false;
   }
+
+  for (const [dx, dy, dz] of leafOffsets) {
+    leafPositions.push([x + dx, y + dy, z + dz]);
+  }
+
+  for (const [lx, ly, lz] of leafPositions) {
+    const block = dimension.getBlock({ x: lx, y: ly, z: lz });
+    if (!canReplaceBlock(block, "minecraft:oak_leaves")) return false;
+  }
+
+  for (const [lx, ly, lz] of trunkPositions) {
+    placeBlock(dimension, lx, ly, lz, RUBBER_LOG_ID);
+  }
+
+  for (const [lx, ly, lz] of leafPositions) {
+    placeBlock(dimension, lx, ly, lz, "minecraft:oak_leaves");
+  }
+
+  return true;
 }
 
 function generateRubberGrove(player) {
-  const dimension = player.dimension;
-  const spawnKey = `${dimension.id}:${Math.floor(player.location.x)},${Math.floor(player.location.y)},${Math.floor(player.location.z)}`;
+  if (isGroveGenerated()) return;
 
-  if (generatedSpawns.has(spawnKey)) return;
+  const dimension = player.dimension;
 
   const baseX = Math.floor(player.location.x) + 4;
   const baseY = Math.floor(player.location.y);
   const baseZ = Math.floor(player.location.z) + 4;
 
-  generateRubberTree(dimension, { x: baseX, y: baseY, z: baseZ });
-  generateRubberTree(dimension, { x: baseX + 6, y: baseY, z: baseZ - 2 });
+  const generatedA = generateRubberTree(dimension, { x: baseX, y: baseY, z: baseZ });
+  const generatedB = generateRubberTree(dimension, { x: baseX + 6, y: baseY, z: baseZ - 2 });
 
-  generatedSpawns.add(spawnKey);
+  if (generatedA || generatedB) {
+    markGroveGenerated();
+  }
 }
 
 world.beforeEvents.itemUseOn.subscribe((event) => {
