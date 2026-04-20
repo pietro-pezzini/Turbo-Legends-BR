@@ -1,0 +1,22 @@
+{
+  "format_version": "1.20.80",
+  "minecraft:block": {
+    "description": {
+      "identifier": "turbo_legends_br:test_block",
+      "menu_category": {
+        "category": "construction"
+      }
+    },
+    "components": {
+      "minecraft:destroy_time": 1,
+      "minecraft:explosion_resistance": 1,
+      "minecraft:map_color": "#7f7f7f",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "turbo_legends_br_test_block",
+          "render_method": "opaque"
+        }
+      }
+    }
+  }
+}

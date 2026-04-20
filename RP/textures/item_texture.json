@@ -1,0 +1,15 @@
+{
+  "resource_pack_name": "Turbo Legends BR",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "turbo_legends_br_test_item": {
+      "textures": "textures/items/test_item"
+    },
+    "turbo_legends_br_latex": {
+      "textures": "textures/items/latex"
+    },
+    "turbo_legends_br_rubber": {
+      "textures": "textures/items/rubber"
+    }
+  }
+}

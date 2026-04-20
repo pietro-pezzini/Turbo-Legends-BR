@@ -1,0 +1,12 @@
+{
+  "resource_pack_name": "Turbo Legends BR",
+  "texture_name": "atlas.terrain",
+  "texture_data": {
+    "turbo_legends_br_test_block": {
+      "textures": "textures/blocks/test_block"
+    },
+    "turbo_legends_br_rubber_log": {
+      "textures": "textures/blocks/rubber_log"
+    }
+  }
+}
