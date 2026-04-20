@@ -1,11 +1,11 @@
 {
   "format_version": [1, 1, 0],
   "turbo_legends_br:test_block": {
-    "textures": "turbo_legends_br_test_block",
+    "textures": "turbo_legends_br:test_block",
     "sound": "stone"
   },
   "turbo_legends_br:rubber_log": {
-    "textures": "turbo_legends_br_rubber_log",
+    "textures": "turbo_legends_br:rubber_log",
     "sound": "wood"
   }
 }

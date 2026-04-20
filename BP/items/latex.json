@@ -9,7 +9,7 @@
     },
     "components": {
       "minecraft:icon": {
-        "texture": "turbo_legends_br_latex"
+        "texture": "turbo_legends_br:latex"
       },
       "minecraft:max_stack_size": 64
     }

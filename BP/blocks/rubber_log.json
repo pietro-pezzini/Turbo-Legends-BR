@@ -16,7 +16,7 @@
       "minecraft:map_color": "#6f4e37",
       "minecraft:material_instances": {
         "*": {
-          "texture": "turbo_legends_br_rubber_log",
+          "texture": "turbo_legends_br:rubber_log",
           "render_method": "opaque"
         }
       }
