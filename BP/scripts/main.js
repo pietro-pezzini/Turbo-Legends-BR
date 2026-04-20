@@ -4,9 +4,13 @@ const RUBBER_LOG_ID = "turbo_legends_br:rubber_log";
 const LATEX_ITEM_ID = "turbo_legends_br:latex";
 const CUT_STATE_KEY = "turbo_legends_br:is_cut";
 const REGEN_TICKS = 20 * 60 * 10;
+const GROVE_CHECK_INTERVAL_TICKS = 20 * 30;
 const regenQueue = new Map();
 const FLAG_OBJECTIVE_ID = "tlb_flags";
 const GROVE_FLAG = "rubber_grove_generated_v1";
+const GROVE_X_KEY = "rubber_grove_x";
+const GROVE_Y_KEY = "rubber_grove_y";
+const GROVE_Z_KEY = "rubber_grove_z";
 const REPLACEABLE_BLOCKS = new Set([
   "minecraft:air",
   "minecraft:cave_air",
@@ -65,6 +69,47 @@ function isGroveGenerated() {
 
 function markGroveGenerated() {
   getFlagsObjective().setScore(GROVE_FLAG, 1);
+}
+
+function setGroveAnchor(baseX, baseY, baseZ) {
+  const objective = getFlagsObjective();
+  objective.setScore(GROVE_X_KEY, baseX);
+  objective.setScore(GROVE_Y_KEY, baseY);
+  objective.setScore(GROVE_Z_KEY, baseZ);
+}
+
+function getGroveAnchor() {
+  const objective = getFlagsObjective();
+
+  try {
+    const baseX = objective.getScore(GROVE_X_KEY);
+    const baseY = objective.getScore(GROVE_Y_KEY);
+    const baseZ = objective.getScore(GROVE_Z_KEY);
+
+    if (
+      typeof baseX !== "number" ||
+      typeof baseY !== "number" ||
+      typeof baseZ !== "number"
+    ) {
+      return null;
+    }
+
+    return { baseX, baseY, baseZ };
+  } catch {
+    return null;
+  }
+}
+
+function getTreeOriginsFromAnchor(anchor) {
+  return [
+    { x: anchor.baseX, y: anchor.baseY, z: anchor.baseZ },
+    { x: anchor.baseX + 6, y: anchor.baseY, z: anchor.baseZ - 2 }
+  ];
+}
+
+function hasRubberLogAt(dimension, origin) {
+  const block = dimension.getBlock(origin);
+  return block?.typeId === RUBBER_LOG_ID;
 }
 
 function canReplaceBlock(block, targetTypeId) {
@@ -140,7 +185,23 @@ function generateRubberGrove(player) {
   const generatedB = generateRubberTree(dimension, { x: baseX + 6, y: baseY, z: baseZ - 2 });
 
   if (generatedA || generatedB) {
+    setGroveAnchor(baseX, baseY, baseZ);
     markGroveGenerated();
+  }
+}
+
+function maintainRubberGrove() {
+  if (!isGroveGenerated()) return;
+
+  const anchor = getGroveAnchor();
+  if (!anchor) return;
+
+  const overworld = world.getDimension("minecraft:overworld");
+  const treeOrigins = getTreeOriginsFromAnchor(anchor);
+
+  for (const origin of treeOrigins) {
+    if (hasRubberLogAt(overworld, origin)) continue;
+    generateRubberTree(overworld, origin);
   }
 }
 
@@ -169,6 +230,7 @@ world.beforeEvents.itemUseOn.subscribe((event) => {
 
 world.afterEvents.playerSpawn.subscribe((event) => {
   if (!event.initialSpawn) return;
+  if (event.player.dimension.id !== "minecraft:overworld") return;
   generateRubberGrove(event.player);
 });
 
@@ -192,5 +254,9 @@ system.runInterval(() => {
     }
 
     regenQueue.delete(key);
+  }
+
+  if (now % GROVE_CHECK_INTERVAL_TICKS === 0) {
+    maintainRubberGrove();
   }
 }, 20);
