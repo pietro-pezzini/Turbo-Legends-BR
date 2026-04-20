@@ -1,0 +1,17 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Turbo Legends BR - Behavior Pack",
+    "description": "Behavior Pack base for Turbo Legends BR.",
+    "uuid": "38cda1cd-7e37-41bd-b238-689119eaa855",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 20, 80]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "4628b7a3-9e84-46bf-a037-d3893b8dd04d",
+      "version": [1, 0, 0]
+    }
+  ]
+}
