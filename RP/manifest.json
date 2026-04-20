@@ -1,0 +1,40 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Turbo Legends BR - Resource Pack",
+    "description": "Resource Pack base for Turbo Legends BR.",
+    "uuid": "5090c0f3-f61e-405c-8401-4a470d697cfb",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 20, 80]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "a8aa3969-7dd4-4f19-8ae9-b6a5f21e7817",
+      "version": [1, 0, 0]
+    }
+  ]
+}
+{
+  "format_version": 2,
+  "header": {
+    "name": "Turbo Legends BR - Resource Pack",
+    "description": "Resource Pack base for Turbo Legends BR.",
+    "uuid": "5090c0f3-f61e-405c-8401-4a470d697cfb",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 20, 80]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "1fc541dc-caac-45a7-9456-4f8aac81c392",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "38cda1cd-7e37-41bd-b238-689119eaa855",
+      "version": [1, 0, 0]
+    }
+  ]
+}

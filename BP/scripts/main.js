@@ -8,7 +8,7 @@ const regenQueue = new Map();
 const generatedSpawns = new Set();
 
 function blockKey(block) {
-  return `${block.dimension.id}:${block.location.x},${block.location.y},${block.location.z}`;
+  return `${block.dimension.id}|${block.location.x},${block.location.y},${block.location.z}`;
 }
 
 function isSword(itemStack) {
@@ -116,7 +116,7 @@ system.runInterval(() => {
   for (const [key, dueTick] of regenQueue) {
     if (now < dueTick) continue;
 
-    const [dimensionId, location] = key.split(":");
+    const [dimensionId, location] = key.split("|");
     const [x, y, z] = location.split(",").map((value) => Number(value));
     const dimension = world.getDimension(dimensionId);
     const block = dimension.getBlock({ x, y, z });
@@ -132,11 +132,3 @@ system.runInterval(() => {
     regenQueue.delete(key);
   }
 }, 20);
-
-world.afterEvents.worldInitialize.subscribe((event) => {
-  event.blockComponentRegistry.registerCustomComponent("turbo_legends_br:rubber_log_component", {
-    onPlayerDestroy: () => {
-      // Placeholder hook for future drop logic.
-    }
-  });
-});
