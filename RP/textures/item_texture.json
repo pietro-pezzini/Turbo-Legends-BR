@@ -2,7 +2,7 @@
   "resource_pack_name": "Turbo Legends BR",
   "texture_name": "atlas.items",
   "texture_data": {
-    "test_item": {
+    "turbo_legends_br:test_item": {
       "textures": "textures/items/test_item"
     }
   }

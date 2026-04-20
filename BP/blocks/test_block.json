@@ -13,7 +13,7 @@
       "minecraft:map_color": "#7f7f7f",
       "minecraft:material_instances": {
         "*": {
-          "texture": "test_block",
+          "texture": "turbo_legends_br:test_block",
           "render_method": "opaque"
         }
       }

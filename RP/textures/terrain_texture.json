@@ -2,7 +2,7 @@
   "resource_pack_name": "Turbo Legends BR",
   "texture_name": "atlas.terrain",
   "texture_data": {
-    "test_block": {
+    "turbo_legends_br:test_block": {
       "textures": "textures/blocks/test_block"
     }
   }
