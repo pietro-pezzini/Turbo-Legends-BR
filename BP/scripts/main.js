@@ -5,12 +5,14 @@ const LATEX_ITEM_ID = "turbo_legends_br:latex";
 const CUT_STATE_KEY = "turbo_legends_br:is_cut";
 const REGEN_TICKS = 20 * 60 * 10;
 const GROVE_CHECK_INTERVAL_TICKS = 20 * 30;
-const regenQueue = new Map();
 const FLAG_OBJECTIVE_ID = "tlb_flags";
 const GROVE_FLAG = "rubber_grove_generated_v1";
 const GROVE_X_KEY = "rubber_grove_x";
 const GROVE_Y_KEY = "rubber_grove_y";
 const GROVE_Z_KEY = "rubber_grove_z";
+const REGEN_QUEUE_PROPERTY = "tlb_regen_queue";
+const regenQueue = new Map();
+const pendingTimers = new Map(); // Track scheduled timers by key
 const REPLACEABLE_BLOCKS = new Set([
   "minecraft:air",
   "minecraft:cave_air",
@@ -24,6 +26,25 @@ const REPLACEABLE_BLOCKS = new Set([
 
 function blockKey(block) {
   return `${block.dimension.id}|${block.location.x},${block.location.y},${block.location.z}`;
+}
+
+function persistRegenQueue() {
+  const data = Array.from(regenQueue.entries());
+  world.setDynamicProperty(REGEN_QUEUE_PROPERTY, JSON.stringify(data));
+}
+
+function restoreRegenQueue() {
+  try {
+    const data = world.getDynamicProperty(REGEN_QUEUE_PROPERTY);
+    if (!data) return;
+    const entries = JSON.parse(data);
+    regenQueue.clear();
+    for (const [key, dueTick] of entries) {
+      regenQueue.set(key, dueTick);
+    }
+  } catch {
+    // Failed to restore; queue will reset
+  }
 }
 
 function isSword(itemStack) {
@@ -118,20 +139,37 @@ function canReplaceBlock(block, targetTypeId) {
   return REPLACEABLE_BLOCKS.has(block.typeId);
 }
 
+function isValidY(dimension, y) {
+  // Validate Y is within dimension height range
+  return y >= dimension.heightRange.min && y <= dimension.heightRange.max;
+}
+
 function placeBlock(dimension, x, y, z, typeId) {
-  const block = dimension.getBlock({ x, y, z });
-  if (!canReplaceBlock(block, typeId)) return false;
-  block.setPermutation(BlockPermutation.resolve(typeId));
-  return true;
+  // Validate height before attempting to place
+  if (!isValidY(dimension, y)) return false;
+
+  try {
+    const block = dimension.getBlock({ x, y, z });
+    if (!canReplaceBlock(block, typeId)) return false;
+    block.setPermutation(BlockPermutation.resolve(typeId));
+    return true;
+  } catch {
+    // Out-of-range, unloaded chunk, or other error
+    return false;
+  }
 }
 
 function generateRubberTree(dimension, origin) {
   const { x, y, z } = origin;
+  
+  // Clamp Y to valid range for this dimension
+  const clampedY = Math.max(dimension.heightRange.min, Math.min(y, dimension.heightRange.max - 5));
+  
   const trunkPositions = [];
   const leafPositions = [];
 
   for (let dy = 0; dy < 4; dy += 1) {
-    trunkPositions.push([x, y + dy, z]);
+    trunkPositions.push([x, clampedY + dy, z]);
   }
 
   const leafOffsets = [
@@ -148,17 +186,25 @@ function generateRubberTree(dimension, origin) {
   ];
 
   for (const [lx, ly, lz] of trunkPositions) {
-    const block = dimension.getBlock({ x: lx, y: ly, z: lz });
-    if (!canReplaceBlock(block, RUBBER_LOG_ID)) return false;
+    try {
+      const block = dimension.getBlock({ x: lx, y: ly, z: lz });
+      if (!canReplaceBlock(block, RUBBER_LOG_ID)) return false;
+    } catch {
+      return false;
+    }
   }
 
   for (const [dx, dy, dz] of leafOffsets) {
-    leafPositions.push([x + dx, y + dy, z + dz]);
+    leafPositions.push([x + dx, clampedY + dy, z + dz]);
   }
 
   for (const [lx, ly, lz] of leafPositions) {
-    const block = dimension.getBlock({ x: lx, y: ly, z: lz });
-    if (!canReplaceBlock(block, "minecraft:oak_leaves")) return false;
+    try {
+      const block = dimension.getBlock({ x: lx, y: ly, z: lz });
+      if (!canReplaceBlock(block, "minecraft:oak_leaves")) return false;
+    } catch {
+      return false;
+    }
   }
 
   for (const [lx, ly, lz] of trunkPositions) {
@@ -224,22 +270,24 @@ world.beforeEvents.itemUseOn.subscribe((event) => {
   if (regenQueue.has(key)) return;
 
   if (addLatexToPlayer(player)) {
-    regenQueue.set(key, system.currentTick + REGEN_TICKS);
+    const dueTick = system.currentTick + REGEN_TICKS;
+    regenQueue.set(key, dueTick);
+    
+    // Schedule individual timer for this entry to reduce scanning overhead
+    if (pendingTimers.has(key)) {
+      system.clearRun(pendingTimers.get(key));
+    }
+    const timerId = system.runTimeout(() => {
+      processRegenEntry(key);
+    }, Math.max(1, REGEN_TICKS));
+    pendingTimers.set(key, timerId);
+    
+    persistRegenQueue();
   }
 });
 
-world.afterEvents.playerSpawn.subscribe((event) => {
-  if (!event.initialSpawn) return;
-  if (event.player.dimension.id !== "minecraft:overworld") return;
-  generateRubberGrove(event.player);
-});
-
-system.runInterval(() => {
-  const now = system.currentTick;
-
-  for (const [key, dueTick] of regenQueue) {
-    if (now < dueTick) continue;
-
+function processRegenEntry(key) {
+  try {
     const [dimensionId, location] = key.split("|");
     const [x, y, z] = location.split(",").map((value) => Number(value));
     const dimension = world.getDimension(dimensionId);
@@ -249,14 +297,39 @@ system.runInterval(() => {
       try {
         setIsCut(block, false);
       } catch {
-        // Ignore unloaded or replaced blocks.
+        // Ignore unloaded or replaced blocks
       }
     }
-
-    regenQueue.delete(key);
+  } catch {
+    // Dimension not found or other error
   }
 
-  if (now % GROVE_CHECK_INTERVAL_TICKS === 0) {
+  regenQueue.delete(key);
+  pendingTimers.delete(key);
+  persistRegenQueue();
+}
+
+world.afterEvents.playerSpawn.subscribe((event) => {
+  if (!event.initialSpawn) return;
+  if (event.player.dimension.id !== "minecraft:overworld") return;
+  generateRubberGrove(event.player);
+});
+
+// Restore regen queue on world load and reschedule timers
+system.runTimeout(() => {
+  restoreRegenQueue();
+  
+  for (const [key, dueTick] of regenQueue) {
+    const remainingTicks = Math.max(1, dueTick - system.currentTick);
+    const timerId = system.runTimeout(() => {
+      processRegenEntry(key);
+    }, remainingTicks);
+    pendingTimers.set(key, timerId);
+  }
+}, 1);
+
+system.runInterval(() => {
+  if (system.currentTick % GROVE_CHECK_INTERVAL_TICKS === 0) {
     maintainRubberGrove();
   }
 }, 20);
