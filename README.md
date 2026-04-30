@@ -116,7 +116,7 @@ Redstone    | Eletrólito | Redstone
 
 ### Árvore de Borracha
 
-- Spawna em biomas florestais
+- Gerada próxima ao primeiro jogador no overworld (spawn) e mantida depois disso
 - Use/interaja com a espada no tronco
 - Coleta o látex com balde
 - Regeneração em 10 minutos por tronco

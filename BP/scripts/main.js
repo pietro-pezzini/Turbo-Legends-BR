@@ -36,8 +36,14 @@ function blockKey(block) {
 
 function persistRegenQueue() {
   try {
-    const data = Array.from(regenQueue.entries());
-    world.setDynamicProperty(REGEN_QUEUE_PROPERTY, JSON.stringify(data));
+    const entries = [];
+    const now = Date.now();
+    for (const [key, dueAtMs] of regenQueue) {
+      const remainingMs = dueAtMs - now;
+      const remainingTicks = Math.max(1, Math.ceil(remainingMs / 50));
+      entries.push([key, remainingTicks]);
+    }
+    world.setDynamicProperty(REGEN_QUEUE_PROPERTY, JSON.stringify(entries));
   } catch {
     // Dynamic property not registered or persistence unavailable
   }
@@ -49,7 +55,9 @@ function restoreRegenQueue() {
     if (!data) return;
     const entries = JSON.parse(data);
     regenQueue.clear();
-    for (const [key, dueAtMs] of entries) {
+    const now = Date.now();
+    for (const [key, remainingTicks] of entries) {
+      const dueAtMs = now + Math.max(1, Number(remainingTicks)) * 50;
       regenQueue.set(key, dueAtMs);
     }
   } catch {
@@ -145,8 +153,12 @@ function getTreeOriginsFromAnchor(anchor) {
 }
 
 function hasRubberLogAt(dimension, origin) {
-  const block = dimension.getBlock(origin);
-  return block?.typeId === RUBBER_LOG_ID;
+  try {
+    const block = dimension.getBlock(origin);
+    return block?.typeId === RUBBER_LOG_ID;
+  } catch {
+    return false;
+  }
 }
 
 function canReplaceBlock(block, targetTypeId) {
