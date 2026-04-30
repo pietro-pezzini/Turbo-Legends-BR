@@ -49,8 +49,8 @@ function restoreRegenQueue() {
     if (!data) return;
     const entries = JSON.parse(data);
     regenQueue.clear();
-    for (const [key, dueTick] of entries) {
-      regenQueue.set(key, dueTick);
+    for (const [key, dueAtMs] of entries) {
+      regenQueue.set(key, dueAtMs);
     }
   } catch {
     // Failed to restore; queue will reset
@@ -286,8 +286,8 @@ world.beforeEvents.itemUseOn.subscribe((event) => {
   if (regenQueue.has(key)) return;
 
   if (addLatexToPlayer(player)) {
-    const dueTick = system.currentTick + REGEN_TICKS;
-    regenQueue.set(key, dueTick);
+    const dueAtMs = Date.now() + REGEN_TICKS * 50;
+    regenQueue.set(key, dueAtMs);
     
     // Schedule individual timer for this entry to reduce scanning overhead
     if (pendingTimers.has(key)) {
@@ -335,8 +335,9 @@ world.afterEvents.playerSpawn.subscribe((event) => {
 system.runTimeout(() => {
   restoreRegenQueue();
   
-  for (const [key, dueTick] of regenQueue) {
-    const remainingTicks = Math.max(1, dueTick - system.currentTick);
+  for (const [key, dueAtMs] of regenQueue) {
+    const remainingMs = dueAtMs - Date.now();
+    const remainingTicks = Math.max(1, Math.ceil(remainingMs / 50));
     const timerId = system.runTimeout(() => {
       processRegenEntry(key);
     }, remainingTicks);
@@ -345,7 +346,5 @@ system.runTimeout(() => {
 }, 1);
 
 system.runInterval(() => {
-  if (system.currentTick % GROVE_CHECK_INTERVAL_TICKS === 0) {
-    maintainRubberGrove();
-  }
-}, 20);
+  maintainRubberGrove();
+}, GROVE_CHECK_INTERVAL_TICKS);
