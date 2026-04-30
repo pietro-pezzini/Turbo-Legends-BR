@@ -1,0 +1,11 @@
+{
+  "format_version": "1.20.80",
+  "minecraft:recipe_furnace": {
+    "description": {
+      "identifier": "turbo_legends_br:latex_to_rubber"
+    },
+    "tags": ["furnace"],
+    "input": "turbo_legends_br:latex",
+    "output": "turbo_legends_br:rubber"
+  }
+}

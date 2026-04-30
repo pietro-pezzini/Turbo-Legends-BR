@@ -1,0 +1,25 @@
+{
+  "format_version": "1.20.80",
+  "minecraft:block": {
+    "description": {
+      "identifier": "turbo_legends_br:rubber_log",
+      "states": {
+        "turbo_legends_br:is_cut": [false, true]
+      },
+      "menu_category": {
+        "category": "nature"
+      }
+    },
+    "components": {
+      "minecraft:destroy_time": 2,
+      "minecraft:explosion_resistance": 3,
+      "minecraft:map_color": "#6f4e37",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "turbo_legends_br:rubber_log",
+          "render_method": "opaque"
+        }
+      }
+    }
+  }
+}

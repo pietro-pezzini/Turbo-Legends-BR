@@ -4,6 +4,12 @@
   "texture_data": {
     "turbo_legends_br:test_item": {
       "textures": "textures/items/test_item"
+    },
+    "turbo_legends_br:latex": {
+      "textures": "textures/items/latex"
+    },
+    "turbo_legends_br:rubber": {
+      "textures": "textures/items/rubber"
     }
   }
 }

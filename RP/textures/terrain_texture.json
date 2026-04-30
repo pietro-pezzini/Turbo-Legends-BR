@@ -4,6 +4,9 @@
   "texture_data": {
     "turbo_legends_br:test_block": {
       "textures": "textures/blocks/test_block"
+    },
+    "turbo_legends_br:rubber_log": {
+      "textures": "textures/blocks/rubber_log"
     }
   }
 }

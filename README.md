@@ -1,52 +1,52 @@
 # Turbo Legends BR
 
-Turbo Legends BR e um add-on para Minecraft Bedrock focado em carros, mecanica modular e progressao tecnica.
+Turbo Legends BR é um add-on para Minecraft Bedrock focado em carros, mecânica modular e progressão técnica.
 
-Construa veiculos do zero, evolua motores, gerencie energia e transforme seu mundo em uma oficina de alta performance.
+Construa veículos do zero, evolua motores, gerencie energia e transforme seu mundo em uma oficina de alta performance.
 
-## Visao Geral
+## Visão Geral
 
-Este projeto combina simulacao automotiva com sistemas de sobrevivencia e producao.
-O objetivo e oferecer uma experiencia de direcao divertida, com identidade brasileira e profundidade de gameplay.
+Este projeto combina simulação automotiva com sistemas de sobrevivência e produção.
+O objetivo é oferecer uma experiência de direção divertida, com identidade brasileira e profundidade de gameplay.
 
 ## Principais Recursos
 
-### Veiculos
+### Veículos
 
-- Icones brasileiros como Fusca, Uno com escada, Gol e Kombi
+- Ícones brasileiros como Fusca, Uno com escada, Gol e Kombi
 - Carros esportivos e hipercarros de alta velocidade
-- Veiculos utilitarios e off-road
+- Veículos utilitários e off-road
 
 ### Engenharia Modular
 
 Monte cada carro com componentes independentes:
 
 - Chassi
-- Motor (progressao de V3 ate V12)
+- Motor (progressão de V3 até V12)
 - Rodas
 - Bateria
 
-Cada peca impacta diretamente o desempenho final.
+Cada peça impacta diretamente o desempenho final.
 
-### Recursos e Producao
+### Recursos e Produção
 
-- Extracao de latex em arvores customizadas
-- Processamento de latex para borracha
-- Producao de aco (ferro + carvao)
-- Eletronica baseada em cobre
+- Extração de látex em árvores customizadas
+- Processamento de látex para borracha
+- Produção de aço (ferro + carvão)
+- Eletrônica baseada em cobre
 
-### Sistema Eletrico
+### Sistema Elétrico
 
-- Cabos para receitas e distribuicao de energia
-- Eletrolitos para motores
-- Niveis de bateria para diferentes demandas
+- Cabos para receitas e distribuição de energia
+- Eletrólitos para motores
+- Níveis de bateria para diferentes demandas
 
 ### Sistema de Calor do Motor
 
 - Motores geram calor durante o uso
-- O calor pode ser aproveitado como forno movel
+- O calor pode ser aproveitado como forno móvel
 - Motores mais fortes geram mais calor
-- Balanceado para nao quebrar a progressao
+- Balanceado para não quebrar a progressão
 
 ### Oficina
 
@@ -54,15 +54,15 @@ Interface dedicada para:
 
 - Montar carros
 - Evoluir componentes
-- Pintar veiculos
+- Pintar veículos
 
-### Customizacao
+### Customização
 
-- Sistema de pintura avancado
+- Sistema de pintura avançado
 - Upgrades de performance
 - Estilos diferentes de montagem
 
-### Mecanicas Especiais
+### Mecânicas Especiais
 
 - Fusca: alta durabilidade
 - Uno com escada: armazenamento ampliado
@@ -74,33 +74,87 @@ Interface dedicada para:
 - Minecraft Bedrock Add-on
 - Behavior Pack + Resource Pack
 - JavaScript (GameTest API)
-- JSON para definicao de sistemas
+- JSON para definição de sistemas
 
-## Instalacao
+## Instalação
 
 1. Baixe a release mais recente do projeto.
 2. Importe os pacotes no Minecraft Bedrock.
 3. Ative o Behavior Pack no mundo.
 4. Ative o Resource Pack no mundo.
-5. Habilite os recursos experimentais necessarios.
+5. Habilite os recursos experimentais necessários.
 
 ## Roadmap
 
-- Sistema de energia avancado
-- Mecanicas de combustivel e oleo
-- Sistema de transito e policia
-- Dano, colisao e fisica de impacto
-- Expansao da frota de veiculos
+- Sistema de energia avançado
+- Mecânicas de combustível e óleo
+- Sistema de trânsito e polícia
+- Dano, colisão e física de impacto
+- Expansão da frota de veículos
+
+## Sistema de Motores
+
+Os motores são o coração do seu veículo, oferecendo diferentes níveis de progressão:
+
+- **V3**: Motor básico, baixo consumo de energia
+- **V5**: Motor balanceado, desempenho médio
+- **V8**: Motor rápido, alto desempenho
+- **V10**: Motor avançado com núcleo de diamante
+- **V12**: Motor supremo com núcleo de netherita
+
+### Receita Base de Motores
+
+Todos os motores seguem este padrão de crafting:
+
+```
+Redstone    | Eletrólito | Redstone
+Ferro       | Cobre      | Ferro
+Redstone    | Eletrólito | Redstone
+```
+
+## Sistema de Recursos
+
+### Árvore de Borracha
+
+- Gerada próxima ao primeiro jogador no overworld (spawn) e mantida depois disso
+- Use/interaja com a espada no tronco
+- Coleta o látex com balde
+- Regeneração em 10 minutos por tronco
+
+### Materiais Principais
+
+- **Aço**: Ferro + Carvão
+- **Eletrólito**: Aço + Cobre
+- **Cabo**: Borracha + Cobre
+
+## Plano de Desenvolvimento
+
+1. **Fase 1**: Configuração base
+2. **Fase 2**: Sistema de recursos (árvore de borracha)
+3. **Fase 3**: Materiais (aço, cabos)
+4. **Fase 4**: Motores
+5. **Fase 5**: Veículos
+6. **Fase 6**: Oficina
+7. **Fase 7**: Sistema de calor
+8. **Fase 8**: Conteúdo de veículos
+9. **Fase 9**: Polimento final
+
+## Decisões Importantes
+
+- ✓ Sem nomes de marcas reais (proteção de direitos autorais)
+- ✓ Sistema modular para veículos
+- ✓ Começar simples e expandir gradualmente
+- ✓ Limitações do Bedrock consideradas
 
 ## Contribuindo
 
-Contribuicoes sao bem-vindas.
+Contribuições são bem-vindas.
 
-1. Faça um fork do repositorio.
+1. Faça um fork do repositório.
 2. Crie uma branch para sua feature: `feat/minha-feature`.
-3. Commit suas alteracoes com mensagens claras.
+3. Commit suas alterações com mensagens claras.
 4. Abra um Pull Request descrevendo o que foi alterado.
 
 ## Status
 
-Projeto em evolucao. Novos sistemas e veiculos serao adicionados em etapas.
+Projeto em evolução. Novos sistemas e veículos serão adicionados em etapas.
