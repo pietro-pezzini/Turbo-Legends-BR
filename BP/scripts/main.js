@@ -1,4 +1,10 @@
-import { BlockPermutation, ItemStack, system, world } from "@minecraft/server";
+import {
+  BlockPermutation,
+  DynamicPropertiesDefinition,
+  ItemStack,
+  system,
+  world
+} from "@minecraft/server";
 
 const RUBBER_LOG_ID = "turbo_legends_br:rubber_log";
 const LATEX_ITEM_ID = "turbo_legends_br:latex";
@@ -29,8 +35,12 @@ function blockKey(block) {
 }
 
 function persistRegenQueue() {
-  const data = Array.from(regenQueue.entries());
-  world.setDynamicProperty(REGEN_QUEUE_PROPERTY, JSON.stringify(data));
+  try {
+    const data = Array.from(regenQueue.entries());
+    world.setDynamicProperty(REGEN_QUEUE_PROPERTY, JSON.stringify(data));
+  } catch {
+    // Dynamic property not registered or persistence unavailable
+  }
 }
 
 function restoreRegenQueue() {
@@ -46,6 +56,12 @@ function restoreRegenQueue() {
     // Failed to restore; queue will reset
   }
 }
+
+world.beforeEvents.worldInitialize.subscribe((event) => {
+  const definition = new DynamicPropertiesDefinition();
+  definition.defineString(REGEN_QUEUE_PROPERTY, 32767);
+  event.propertyRegistry.registerWorldDynamicProperties(definition);
+});
 
 function isSword(itemStack) {
   if (!itemStack) return false;

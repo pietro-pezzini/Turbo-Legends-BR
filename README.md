@@ -117,7 +117,7 @@ Redstone    | Eletrólito | Redstone
 ### Árvore de Borracha
 
 - Spawna em biomas florestais
-- Corte o tronco com espada
+- Use/interaja com a espada no tronco
 - Coleta o látex com balde
 - Regeneração em 10 minutos por tronco
 
